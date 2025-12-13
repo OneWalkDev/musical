@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
+import { apiRequest } from '@/utils/api'
 
 interface User {
   id: number
@@ -39,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/me/`, {
+      const response = await apiRequest('/api/me/', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json',
@@ -88,7 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const login = async (username: string, password: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/login/`, {
+    const response = await apiRequest('/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -111,7 +112,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const token = localStorage.getItem('auth_token')
       if (token) {
-        await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/logout/`, {
+        await apiRequest('/api/logout/', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -129,7 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signup = async (username: string, password: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/signup/`, {
+    const response = await apiRequest('/api/signup/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
