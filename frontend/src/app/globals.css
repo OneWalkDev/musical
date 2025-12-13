@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  background: radial-gradient(circle at 20% 20%, #dff3ff 0, rgba(223, 243, 255, 0) 35%),
+              radial-gradient(circle at 80% 10%, #fdf0ff 0, rgba(253, 240, 255, 0) 32%),
+              radial-gradient(circle at 50% 90%, #e7fff5 0, rgba(231, 255, 245, 0) 38%),
+              linear-gradient(135deg, #fdfcff 0%, #f4fbff 45%, #ebfff5 100%);
+  min-height: 100vh;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}

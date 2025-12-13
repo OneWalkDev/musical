@@ -1,0 +1,49 @@
+FROM php:8.4-fpm
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    curl \
+    unzip \
+    zip \
+    libonig-dev \
+    libxml2-dev \
+    libpq-dev \
+    libzip-dev \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+# GD configure
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+
+# PHP extensions
+RUN docker-php-ext-install -j$(nproc) \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    pdo_pgsql \
+    zip
+
+# Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+COPY . .
+
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+RUN echo "upload_max_filesize = 64M" >> /usr/local/etc/php/conf.d/uploads.ini \
+    && echo "post_max_size = 64M" >> /usr/local/etc/php/conf.d/uploads.ini
+
+EXPOSE 9000
+CMD ["php-fpm"]
