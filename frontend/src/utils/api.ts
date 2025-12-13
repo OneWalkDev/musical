@@ -1,8 +1,15 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const resolveBaseUrl = (): string => {
+  const envBase = process.env.NEXT_PUBLIC_API_URL
+  if (envBase) return envBase
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin
+  }
+  return 'http://localhost:8000'
+}
 
 const resolveUrl = (url: string): string => {
   if (/^https?:\/\//.test(url)) return url
-  return `${API_BASE}${url}`
+  return `${resolveBaseUrl()}${url}`
 }
 
 export const getAuthHeaders = (): HeadersInit => {
