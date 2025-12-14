@@ -91,7 +91,7 @@ export function AppHeader() {
                     <motion.button
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="md:hidden text-white p-2"
+                        className="md:hidden text-slate-700 p-2 hover:text-slate-900 transition-colors duration-200"
                         aria-label="メニューを開く"
                     >
                         <svg
