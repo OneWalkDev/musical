@@ -172,7 +172,7 @@ export default function Home() {
                 </div>
                 <div className="flex items-center gap-3 text-sm font-semibold text-amber-700">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-                  {stats?.active_users || 0}人が同時に交換中
+                  {stats?.active_users || 0}人交換完了！
                 </div>
               </motion.div>
 
@@ -203,7 +203,7 @@ export default function Home() {
                     </p>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-100 to-pink-100 text-amber-700 text-xs font-semibold shadow-sm">
-                    交換中
+                    交換済
                   </span>
                 </div>
 
@@ -265,10 +265,10 @@ export default function Home() {
                 className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 mt-10 sm:mt-12"
               >
               {[
-                { step: '1', title: '登録してログイン', desc: 'ニックネームとパスワードだけ。秒で終わるスタート。' },
-                { step: '2', title: 'ジャンル・気分をセット', desc: '好きなジャンルやシーンで「今日のムード」を決める。' },
+                { step: '1', title: '登録してログイン', desc: '必要なのはニックネームとパスワードだけ。すぐに始められる' },
+                { step: '2', title: 'ジャンル・気分をセット', desc: '好きなジャンルやシーンで「今日の1曲」を決める。' },
                 { step: '3', title: '今日の1曲を投稿', desc: 'YouTubeのリンクを貼るだけ。1日1曲。' },
-                { step: '4', title: '同ジャンルの1曲が届く', desc: '同じムードの誰かから即リターン。お気に入りが増える。' }
+                { step: '4', title: '同ジャンルの1曲が届く', desc: '誰かから曲が返ってくる。新たな出会いを見つけよう。' }
               ].map((item, index) => (
                 <motion.div
                   key={index}
