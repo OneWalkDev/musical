@@ -217,9 +217,8 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="absolute -right-4 top-1/3 rounded-2xl bg-white/80 border border-amber-100 px-4 py-3 shadow-lg">
-                        <p className="text-xs uppercase tracking-[0.22em] text-amber-600 font-semibold">mood</p>
+                        <p className="text-xs uppercase tracking-[0.22em] text-amber-600 font-semibold">ジャンル</p>
                         <p className="text-sm font-semibold text-slate-900">{stats?.today_exchange ? `${stats.today_exchange.genre}` : "Chill"}</p>
-                        <p className="text-xs text-slate-500">Lo-fi · Synthwave</p>
                       </div>
                     </div>
                   </div>
