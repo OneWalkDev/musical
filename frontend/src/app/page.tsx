@@ -8,6 +8,7 @@ import { GiGrandPiano } from 'react-icons/gi'
 import Link from 'next/link'
 import { apiRequest } from '@/utils/api'
 import { useEffect, useState } from 'react'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 interface Stats {
   today_exchange: {
@@ -335,6 +336,7 @@ export default function Home() {
           </motion.div>
         </section>
       </main>
+      <AppFooter/>
     </>
   )
 }

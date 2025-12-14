@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import { IoMusicalNotes, IoRefresh } from 'react-icons/io5'
 import { apiRequest } from '@/utils/api'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 export default function WaitingPage() {
   const { isAuthenticated } = useAuth()
@@ -150,6 +151,7 @@ export default function WaitingPage() {
           </motion.div>
         </motion.div>
       </main>
+      <AppFooter />
     </>
   )
 }

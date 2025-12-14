@@ -8,6 +8,7 @@ import { motion } from 'motion/react'
 import { IoMusicalNotes } from 'react-icons/io5'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { apiRequest } from '@/utils/api'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 interface Genre {
   id: number
@@ -241,6 +242,7 @@ export default function ReceivePreferencesPage() {
           </motion.div>
         </motion.div>
       </main>
+      <AppFooter />
     </>
   )
 }

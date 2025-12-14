@@ -10,6 +10,7 @@ import { LuLink } from 'react-icons/lu'
 import { FaMusic, FaUser } from 'react-icons/fa'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { apiRequest } from '@/utils/api'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 interface Genre {
   id: number
@@ -354,7 +355,7 @@ export default function Music() {
     const regex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}$/;
     const isYoutubeUrl = regex.test(normalizeUrl);
 
-    if(isYoutubeUrl){
+    if (isYoutubeUrl) {
       setUrl(normalizeUrl)
     }
 
@@ -493,7 +494,7 @@ export default function Music() {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <LuLink/>
+                    <LuLink />
                   </div>
                   <input
                     type="text"
@@ -514,7 +515,7 @@ export default function Music() {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <FaUser/>
+                    <FaUser />
                   </div>
                   <input
                     type="text"
@@ -649,7 +650,7 @@ export default function Music() {
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <FaMusic/>
+                    <FaMusic />
                   </div>
                   <input
                     type="text"
@@ -875,8 +876,8 @@ export default function Music() {
                                 ${isSelected
                                   ? 'bg-gradient-to-r from-amber-400 via-pink-500 to-sky-500 text-white border border-white/40 shadow-sm'
                                   : isDisabled
-                                  ? 'bg-white text-slate-300 border border-amber-50 cursor-not-allowed'
-                                  : 'bg-white text-slate-800 border border-amber-100 hover:shadow-sm'
+                                    ? 'bg-white text-slate-300 border border-amber-50 cursor-not-allowed'
+                                    : 'bg-white text-slate-800 border border-amber-100 hover:shadow-sm'
                                 }
                               `}
                             >
@@ -914,6 +915,7 @@ export default function Music() {
           </motion.div>
         </motion.div>
       </main>
+      <AppFooter />
     </>
   );
 }

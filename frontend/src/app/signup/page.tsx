@@ -7,6 +7,7 @@ import { IoMusicalNotes, IoLockClosed, IoPerson } from 'react-icons/io5'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 export default function SignupPage() {
   const [username, setUsername] = useState('')
@@ -129,9 +130,8 @@ export default function SignupPage() {
                     id="username"
                     value={username}
                     onChange={(e) => handleUsernameChange(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-3 bg-white border rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all duration-200 shadow-sm ${
-                      usernameError ? 'border-red-300' : 'border-amber-100'
-                    }`}
+                    className={`w-full pl-10 pr-4 py-3 bg-white border rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all duration-200 shadow-sm ${usernameError ? 'border-red-300' : 'border-amber-100'
+                      }`}
                     placeholder="ユーザーネームを入力"
                     required
                     minLength={3}
@@ -256,6 +256,7 @@ export default function SignupPage() {
           </motion.div>
         </motion.div>
       </main>
+      <AppFooter />
     </>
   )
 }
