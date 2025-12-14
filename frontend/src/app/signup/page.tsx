@@ -14,6 +14,7 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [usernameError, setUsernameError] = useState('')
   const { signup, isAuthenticated } = useAuth()
   const router = useRouter()
 
@@ -23,9 +24,39 @@ export default function SignupPage() {
     }
   });
 
+  // ユーザーネームのバリデーション
+  const validateUsername = (value: string): string => {
+    if (value.length < 3) {
+      return 'ユーザーネームは3文字以上で入力してください'
+    }
+    // 日本語、英語、数字のみを許可（ひらがな、カタカナ、漢字、英字、数字）
+    const validPattern = /^[a-zA-Z0-9ぁ-んァ-ヶー一-龯々]+$/
+    if (!validPattern.test(value)) {
+      return 'ユーザーネームは日本語、英語、数字のみ使用できます'
+    }
+    return ''
+  }
+
+  const handleUsernameChange = (value: string) => {
+    setUsername(value)
+    if (value.length > 0) {
+      const error = validateUsername(value)
+      setUsernameError(error)
+    } else {
+      setUsernameError('')
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    // ユーザーネームのバリデーション
+    const usernameValidationError = validateUsername(username)
+    if (usernameValidationError) {
+      setError(usernameValidationError)
+      return
+    }
 
     // パスワード確認
     if (password !== confirmPassword) {
@@ -97,12 +128,25 @@ export default function SignupPage() {
                     type="text"
                     id="username"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-amber-100 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all duration-200 shadow-sm"
+                    onChange={(e) => handleUsernameChange(e.target.value)}
+                    className={`w-full pl-10 pr-4 py-3 bg-white border rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all duration-200 shadow-sm ${
+                      usernameError ? 'border-red-300' : 'border-amber-100'
+                    }`}
                     placeholder="ユーザーネームを入力"
                     required
+                    minLength={3}
                   />
                 </div>
+                {usernameError && (
+                  <p className="mt-1 text-xs text-red-600">
+                    {usernameError}
+                  </p>
+                )}
+                {!usernameError && username.length > 0 && (
+                  <p className="mt-1 text-xs text-slate-500">
+                    日本語、英語、数字のみ使用できます（3文字以上）
+                  </p>
+                )}
               </div>
 
               {/* Password Field */}
