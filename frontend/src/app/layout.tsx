@@ -11,8 +11,8 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: 'Musical App',
-  description: 'Musical application built with Next.js and Django',
+  title: 'Musical',
+  description: '♫音楽交換サイト♫',
 }
 
 export default function RootLayout({
