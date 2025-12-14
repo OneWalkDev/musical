@@ -5,6 +5,7 @@ import { motion } from 'motion/react'
 import { AppHeader } from '@/components/layout/AppHeader'
 import { IoMusicalNotes, IoSettingsSharp } from 'react-icons/io5'
 import { FaHistory, FaHeart } from 'react-icons/fa'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 export default function SettingsPage() {
   const cards = [
@@ -86,6 +87,7 @@ export default function SettingsPage() {
           </div>
         </div>
       </main>
+      <AppFooter />
     </>
   )
 }

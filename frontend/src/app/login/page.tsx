@@ -7,6 +7,7 @@ import { IoMusicalNotes, IoLockClosed, IoPerson } from 'react-icons/io5'
 import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
@@ -180,6 +181,7 @@ export default function LoginPage() {
           </motion.div>
         </motion.div>
       </main>
+      <AppFooter />
     </>
   )
 }

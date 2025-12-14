@@ -8,6 +8,7 @@ import { motion } from 'motion/react'
 import { IoMusicalNotes } from 'react-icons/io5'
 import { FaPlay } from 'react-icons/fa'
 import { apiRequest } from '@/utils/api'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 interface Genre {
   id: number
@@ -302,6 +303,7 @@ function ReceiveContent() {
           </motion.div>
         </motion.div>
       </main>
+      <AppFooter />
     </>
   )
 }

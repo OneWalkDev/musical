@@ -8,6 +8,7 @@ import { motion } from 'motion/react'
 import { IoMusicalNotes } from 'react-icons/io5'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { apiRequest } from '@/utils/api'
+import { AppFooter } from '@/components/layout/AppFooter'
 
 interface Genre {
   id: number
@@ -240,12 +241,12 @@ export default function ProfileSetup() {
                       })}
                     </div>
                     {filteredGenres.length === 0 && (
-                    <div className="text-slate-500 text-center py-4 text-sm">
-                      該当するジャンルが見つかりません
-                    </div>
-                  )}
+                      <div className="text-slate-500 text-center py-4 text-sm">
+                        該当するジャンルが見つかりません
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
               </div>
 
               {/* 送信ボタン */}
@@ -262,6 +263,7 @@ export default function ProfileSetup() {
           </motion.div>
         </motion.div>
       </main>
+      <AppFooter />
     </>
   )
 }
