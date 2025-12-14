@@ -6,6 +6,7 @@ import { IoMusicalNotes, IoSparkles } from 'react-icons/io5'
 import { FaGuitar, FaDrum } from 'react-icons/fa'
 import { GiGrandPiano } from 'react-icons/gi'
 import Link from 'next/link'
+import { apiRequest } from '@/utils/api'
 import { useEffect, useState } from 'react'
 
 interface Stats {
@@ -28,7 +29,7 @@ export default function Home() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/stats/')
+        const response = await apiRequest('/api/stats/')
         if (response.ok) {
           const data = await response.json()
           setStats(data)

@@ -319,6 +319,8 @@ export default function Music() {
     setSelectedArtistId(mbArtist.id)
     setShowArtistSuggestions(false)
     setArtistSuggestions([])
+    setArtistSearched(false) // 検索済みフラグをリセット
+    setManualArtistEntry(false) // 手動入力フラグもリセット
   }
 
   // 曲選択ハンドラー
@@ -327,6 +329,8 @@ export default function Music() {
     setSelectedRecordingId(recording.id)
     setShowTitleSuggestions(false)
     setTitleSuggestions([])
+    setTitleSearched(false) // 検索済みフラグをリセット
+    setManualTitleEntry(false) // 手動入力フラグもリセット
   }
 
   // ジャンル選択のトグル（最大3つまで）
