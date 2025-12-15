@@ -9,6 +9,7 @@ class Genre extends Model
     protected $fillable = [
         'name',
         'slug',
+        'order',
     ];
 
     public function users()

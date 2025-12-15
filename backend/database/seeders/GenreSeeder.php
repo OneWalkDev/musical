@@ -26,6 +26,7 @@ class GenreSeeder extends Seeder
             ['name' => '洋ロック', 'slug' => 'us-rock'],
             ['name' => 'ラウドロック', 'slug' => 'loud-rock'],
             ['name' => 'パンクロック', 'slug' => 'punk-rock'],
+            ['name' => 'メロコア', 'slug' => 'melodic-hardcore'],
             ['name' => 'メタル', 'slug' => 'metal'],
             ['name' => 'オルタナティブ', 'slug' => 'alternative'],
             ['name' => 'インディー', 'slug' => 'indie'],
@@ -61,6 +62,7 @@ class GenreSeeder extends Seeder
 
             // サブカル / コンテンツ系
             ['name' => 'アニソン', 'slug' => 'anime-song'],
+            ['name' => 'ゲームソング', 'slug' => 'game-song'],
             ['name' => 'ボーカロイド', 'slug' => 'vocaloid'],
             ['name' => '東方Project', 'slug' => 'touhou-project'],
             ['name' => 'サンクラ', 'slug' => 'soundcloud'],

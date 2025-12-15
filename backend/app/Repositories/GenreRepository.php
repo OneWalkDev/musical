@@ -9,7 +9,7 @@ class GenreRepository
 {
     public function getAll(): Collection
     {
-        return Genre::all();
+        return Genre::orderBy('order')->get();
     }
 
     public function findById(int $id): ?Genre
