@@ -247,4 +247,42 @@ class PostService
             ],
         ];
     }
+
+    public function getSentHistory(User $user, int $perPage = 10): array
+    {
+        $paginator = $this->postRepository->getSentByUserPaginated($user, $perPage);
+
+        $data = $paginator->getCollection()->map(function ($post) {
+            return [
+                'id' => $post->id,
+                'sent_at' => $post->created_at?->toIso8601String(),
+                'track' => [
+                    'title' => $post->track->title,
+                    'artist' => $post->track->artist,
+                    'url' => $post->track->url,
+                    'primary_genre' => [
+                        'id' => $post->track->primaryGenre->id,
+                        'name' => $post->track->primaryGenre->name,
+                        'slug' => $post->track->primaryGenre->slug,
+                    ],
+                ],
+                'genres' => $post->genres->map(fn($genre) => [
+                    'id' => $genre->id,
+                    'name' => $genre->name,
+                    'slug' => $genre->slug,
+                ]),
+                'comment' => $post->comment,
+            ];
+        })->values();
+
+        return [
+            'data' => $data,
+            'pagination' => [
+                'current_page' => $paginator->currentPage(),
+                'per_page' => $paginator->perPage(),
+                'last_page' => $paginator->lastPage(),
+                'total' => $paginator->total(),
+            ],
+        ];
+    }
 }
