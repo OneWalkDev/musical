@@ -27,7 +27,9 @@ export default function WaitingPage() {
   const checkReceivedPost = async () => {
     setIsChecking(true)
     try {
-      const response = await apiRequest('/api/today-received-post/')
+      const response = await apiRequest('/api/check-receive/', {
+        method: 'POST',
+      })
 
       if (response.ok) {
         const data = await response.json()

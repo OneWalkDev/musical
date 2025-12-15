@@ -113,4 +113,25 @@ class PostController extends Controller
 
         return response()->json($history);
     }
+
+    public function checkReceive(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Not authenticated'], 401);
+        }
+
+        // プールから受け取りを試みる
+        $received = $this->postService->checkAndReceiveFromPool($user);
+
+        if ($received) {
+            // 受け取りに成功した場合、更新された今日の受信情報を返す
+            $result = $this->postService->getTodayReceivedPost($user);
+            return response()->json($result);
+        }
+
+        // まだ受け取れていない
+        return response()->json(['has_received' => false]);
+    }
 }
