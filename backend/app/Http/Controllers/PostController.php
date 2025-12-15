@@ -98,4 +98,19 @@ class PostController extends Controller
 
         return response()->json($history);
     }
+
+    public function sentHistory(Request $request)
+    {
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Not authenticated'], 401);
+        }
+
+        $perPage = (int) $request->query('per_page', 10);
+
+        $history = $this->postService->getSentHistory($user, $perPage);
+
+        return response()->json($history);
+    }
 }

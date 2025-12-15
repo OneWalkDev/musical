@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { motion } from 'motion/react'
 import { AppHeader } from '@/components/layout/AppHeader'
 import { IoMusicalNotes, IoSettingsSharp } from 'react-icons/io5'
-import { FaHistory, FaHeart } from 'react-icons/fa'
+import { FaHistory, FaHeart, FaPaperPlane } from 'react-icons/fa'
 import { AppFooter } from '@/components/layout/AppFooter'
 
 export default function SettingsPage() {
@@ -22,6 +22,13 @@ export default function SettingsPage() {
       href: '/receive/history',
       icon: <FaHistory />,
       color: 'from-sky-500 via-cyan-500 to-emerald-500'
+    },
+    {
+      title: '送信履歴',
+      desc: 'これまで送った曲を確認',
+      href: '/sent/history',
+      icon: <FaPaperPlane />,
+      color: 'from-pink-500 via-purple-500 to-indigo-500'
     },
   ]
 

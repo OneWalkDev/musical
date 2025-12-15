@@ -86,4 +86,12 @@ class PostRepository
             ->distinct('user_id')
             ->count('user_id');
     }
+
+    public function getSentByUserPaginated(User $user, int $perPage = 10)
+    {
+        return Post::where('user_id', $user->id)
+            ->with(['track.primaryGenre', 'genres'])
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
+    }
 }

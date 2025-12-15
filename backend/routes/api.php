@@ -22,4 +22,5 @@ Route::post('/posts/', [PostController::class, 'createPost'])->middleware('auth:
 Route::get('/posts/{id}/', [PostController::class, 'show'])->middleware('auth:sanctum');
 Route::get('/today-received-post/', [PostController::class, 'todayReceivedPost'])->middleware('auth:sanctum');
 Route::get('/received-posts/', [PostController::class, 'receivedHistory'])->middleware('auth:sanctum');
+Route::get('/sent-posts/', [PostController::class, 'sentHistory'])->middleware('auth:sanctum');
 Route::get('/stats/', [PostController::class, 'stats']);
