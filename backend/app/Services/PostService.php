@@ -63,23 +63,12 @@ class PostService
             // Attach genres
             $this->postRepository->attachGenres($post, $data['genre_ids']);
 
-            // Create pool entry
-            $poolEntry = $this->poolEntryRepository->create([
+            // Create pool entry 
+            $this->poolEntryRepository->create([
                 'post_id' => $post->id,
                 'is_consumed' => false,
             ]);
 
-            // 1. Find waiting users and assign them the new post
-            $waitingExchange = $this->exchangeRepository->findWaitingExchange($user, $track);
-
-            if ($waitingExchange) {
-                $this->poolEntryRepository->markAsConsumed($poolEntry);
-                $this->exchangeRepository->update($waitingExchange, [
-                    'received_post_id' => $post->id,
-                ]);
-            }
-
-            // 2. Find a song for current user
             $receivedTrackIds = $this->exchangeRepository->getReceivedTrackIds($user);
             $availablePoolEntry = $this->poolEntryRepository->findAvailableEntry($user, $receivedTrackIds);
 
