@@ -7,6 +7,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { motion } from 'motion/react'
 import { IoMusicalNotes } from 'react-icons/io5'
 import { FaPlay } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 import { apiRequest } from '@/utils/api'
 import { AppFooter } from '@/components/layout/AppFooter'
 
@@ -111,6 +112,23 @@ function ReceiveContent() {
     if (post?.track.url) {
       window.open(post.track.url, '_blank')
     }
+  }
+
+  const handleShareToTwitter = () => {
+    if (!post) return
+
+    // ジャンルをハッシュタグ用に整形
+    const genreList = post.genres && post.genres.length > 0
+      ? post.genres
+      : [post.track.primary_genre]
+
+    const genreNames = genreList.map(g => g.name).join('・')
+    const genreHashtags = genreList.map(g => `#${g.name.replace(/\s+/g, '')}`).join(' ')
+
+    const text = `Musicalで${post.username}さんから「${post.track.title} - ${post.track.artist}」が届きました！🎵\nhttps://musical.yurisi.space\n\n#Musical #音楽交換 ${genreHashtags}\n${post.track.url}`
+    const shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`
+
+    window.open(shareUrl, '_blank')
   }
 
   if (isLoading) {
@@ -287,12 +305,26 @@ function ReceiveContent() {
                 YouTubeで開く
               </motion.button>
 
+              {/* X共有ボタン */}
+              <motion.button
+                onClick={handleShareToTwitter}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={showContent ? { opacity: 1, scale: 1 } : {}}
+                transition={{ delay: 2.2, duration: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full py-4 bg-gradient-to-r from-slate-700 to-black text-white rounded-xl font-semibold text-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3"
+              >
+                <FaXTwitter className="text-2xl" />
+                Xで共有
+              </motion.button>
+
               {/* ホームに戻るボタン */}
               <motion.button
                 onClick={() => router.push('/')}
                 initial={{ opacity: 0 }}
                 animate={showContent ? { opacity: 1 } : {}}
-                transition={{ delay: 2.2, duration: 0.5 }}
+                transition={{ delay: 2.3, duration: 0.5 }}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full py-3 bg-white text-slate-900 rounded-lg font-semibold border border-amber-100 hover:shadow-md transition-all duration-300"
