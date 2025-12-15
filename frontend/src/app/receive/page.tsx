@@ -125,7 +125,7 @@ function ReceiveContent() {
     const genreNames = genreList.map(g => g.name).join('・')
     const genreHashtags = genreList.map(g => `#${g.name.replace(/\s+/g, '')}`).join(' ')
 
-    const text = `Musicalで${post.username}さんから「${post.track.title} - ${post.track.artist}」が届きました！🎵\n\n#Musical #音楽交換 ${genreHashtags}\n${post.track.url}`
+    const text = `Musicalで${post.username}さんから「${post.track.title} - ${post.track.artist}」が届きました！🎵\nhttps://musical.yurisi.space\n\n#Musical #音楽交換 ${genreHashtags}\n${post.track.url}`
     const shareUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`
 
     window.open(shareUrl, '_blank')
