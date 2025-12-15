@@ -285,4 +285,31 @@ class PostService
             ],
         ];
     }
+
+    public function checkAndReceiveFromPool(User $user): bool
+    {
+        return DB::transaction(function () use ($user) {
+            // 今日の待機中のExchangeを取得
+            $waitingExchange = $this->exchangeRepository->findTodayExchange($user);
+
+            // 待機中のExchangeがない、または既に受け取り済みの場合は何もしない
+            if (!$waitingExchange || $waitingExchange->received_post_id !== null) {
+                return false;
+            }
+
+            // プールから自分のジャンルに合う曲を探す
+            $receivedTrackIds = $this->exchangeRepository->getReceivedTrackIds($user);
+            $availablePoolEntry = $this->poolEntryRepository->findAvailableEntry($user, $receivedTrackIds);
+
+            if ($availablePoolEntry) {
+                $this->poolEntryRepository->markAsConsumed($availablePoolEntry);
+                $this->exchangeRepository->update($waitingExchange, [
+                    'received_post_id' => $availablePoolEntry->post_id,
+                ]);
+                return true;
+            }
+
+            return false;
+        });
+    }
 }
