@@ -104,11 +104,11 @@ export default function Home() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.7 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-black leading-[1.04] tracking-tight"
+                className="text-4xl sm:text-4xl lg:text-6xl font-black leading-[1.04] tracking-tight"
               >
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-pink-500 to-sky-500">自分にあう</span>
                 <br />
-                新しい音楽を発見しよう
+                <span className="lg:text-5xl">新しい音楽を発見しよう</span>
               </motion.h1>
 
               <motion.p
