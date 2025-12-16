@@ -23,6 +23,7 @@ class CreatePostRequest extends FormRequest
             'genre_ids' => 'required|array|min:1|max:3',
             'genre_ids.*' => 'exists:genres,id',
             'comment' => 'nullable|string',
+            'impression' => 'nullable|string|max:2000',
         ];
     }
 
@@ -43,6 +44,7 @@ class CreatePostRequest extends FormRequest
             'genre_ids.min' => 'ジャンルは1つ以上選択してください。',
             'genre_ids.max' => 'ジャンルは3つまで選択できます。',
             'genre_ids.*.exists' => '選択されたジャンルは無効です。',
+            'impression.max' => '感想は2000文字以内で入力してください。',
         ];
     }
 }

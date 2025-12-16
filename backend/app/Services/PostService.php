@@ -57,6 +57,7 @@ class PostService
                 'user_id' => $user->id,
                 'track_id' => $track->id,
                 'comment' => $data['comment'] ?? null,
+                'impression' => $data['impression'] ?? null,
                 'post_date' => $today,
             ]);
 
@@ -151,6 +152,7 @@ class PostService
                     'slug' => $genre->slug,
                 ]),
                 'comment' => $receivedPost->comment,
+                'impression' => $receivedPost->impression,
                 'created_at' => $receivedPost->created_at->toIso8601String(),
             ],
         ];
@@ -185,6 +187,7 @@ class PostService
                 'slug' => $genre->slug,
             ]),
             'comment' => $post->comment,
+            'impression' => $post->impression,
             'created_at' => $post->created_at->toIso8601String(),
         ];
     }
@@ -234,6 +237,7 @@ class PostService
                     'slug' => $genre->slug,
                 ]),
                 'comment' => $post->comment,
+                'impression' => $post->impression,
             ];
         })->values();
 
@@ -272,6 +276,7 @@ class PostService
                     'slug' => $genre->slug,
                 ]),
                 'comment' => $post->comment,
+                'impression' => $post->impression,
             ];
         })->values();
 

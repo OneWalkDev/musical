@@ -10,6 +10,7 @@ class Post extends Model
         'user_id',
         'track_id',
         'comment',
+        'impression',
         'post_date',
     ];
 

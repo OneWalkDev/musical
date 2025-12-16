@@ -44,11 +44,13 @@ export default function Music() {
   const [url, setUrl] = useState<string>("")
   const [title, setTitle] = useState<string>("")
   const [artist, setArtist] = useState<string>("")
+  const [impression, setImpression] = useState<string>("")
   const [genres, setGenres] = useState<Genre[]>([])
   const [selectedGenres, setSelectedGenres] = useState<number[]>([])
   const [isLoadingGenres, setIsLoadingGenres] = useState(false)
   const [genreSearch, setGenreSearch] = useState('')
   const MAX_GENRE_SELECTION = 3
+  const MAX_IMPRESSION_LENGTH = 2000
 
   // MusicBrainz関連のstate
   const [artistSuggestions, setArtistSuggestions] = useState<MBArtist[]>([])
@@ -383,6 +385,7 @@ export default function Music() {
           url,
           title,
           artist,
+          impression: impression || null,
           genre_ids: selectedGenres,
           primary_genre_id: selectedGenres[0], // 最初のジャンルをプライマリに
           musicbrainz_id: selectedRecordingId || null,
@@ -899,6 +902,29 @@ export default function Music() {
                     </div>
                   </div>
                 )}
+              </div>
+
+              {/* 感想入力 */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="block text-white font-medium">
+                    この楽曲の必聴ポイント（任意）
+                  </label>
+                  <span className="text-sm text-slate-500">
+                    {impression.length}/{MAX_IMPRESSION_LENGTH}文字
+                  </span>
+                </div>
+                <textarea
+                  value={impression}
+                  onChange={(e) => {
+                    if (e.target.value.length <= MAX_IMPRESSION_LENGTH) {
+                      setImpression(e.target.value)
+                    }
+                  }}
+                  placeholder="この曲の感想や良い点を書いてください..."
+                  className="w-full px-4 py-3 bg-white border border-amber-100 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all duration-200 shadow-sm resize-none"
+                  rows={6}
+                />
               </div>
 
               {/* 送信ボタン */}
