@@ -122,7 +122,15 @@ class PostController extends Controller
             return response()->json(['error' => 'Not authenticated'], 401);
         }
 
-        // プールから受け取りを試みる
+        // まず今日の受信情報を確認
+        $result = $this->postService->getTodayReceivedPost($user);
+
+        // すでに受け取っている場合はその情報を返す
+        if ($result['has_received']) {
+            return response()->json($result);
+        }
+
+        // まだ受け取っていない場合、プールから受け取りを試みる
         $received = $this->postService->checkAndReceiveFromPool($user);
 
         if ($received) {

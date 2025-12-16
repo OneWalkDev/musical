@@ -40,6 +40,14 @@ class ExchangeRepository
             ->first();
     }
 
+    public function findLatestWaitingExchange(User $user): ?Exchange
+    {
+        return Exchange::where('requester_user_id', $user->id)
+            ->whereNull('received_post_id')
+            ->orderByDesc('created_at')
+            ->first();
+    }
+
     public function hasPastExchangeWithTrack(User $user, int $trackId, int $excludeExchangeId): bool
     {
         return Exchange::where('requester_user_id', $user->id)

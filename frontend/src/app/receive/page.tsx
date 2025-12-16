@@ -30,6 +30,7 @@ interface Post {
   }
   genres: Genre[]  // すべてのジャンル
   comment: string
+  impression?: string
   created_at: string
 }
 
@@ -291,12 +292,25 @@ function ReceiveContent() {
                 </motion.div>
               )}
 
+              {/* 感想 */}
+              {post.impression && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={showContent ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 2.0, duration: 0.5 }}
+                  className="bg-gradient-to-br from-amber-50 via-pink-50 to-sky-50 rounded-lg p-6 border border-white/60 shadow-sm"
+                >
+                  <p className="text-slate-600 text-sm mb-2 font-semibold">📝 必聴ポイント:</p>
+                  <p className="text-slate-900 text-base whitespace-pre-wrap leading-relaxed">{post.impression}</p>
+                </motion.div>
+              )}
+
               {/* YouTubeで開くボタン */}
               <motion.button
                 onClick={handlePlayMusic}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={showContent ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: 2.1, duration: 0.5 }}
+                transition={{ delay: 2.2, duration: 0.5 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="w-full py-4 bg-gradient-to-r from-amber-400 via-pink-500 to-sky-500 text-white rounded-xl font-semibold text-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3"
@@ -310,7 +324,7 @@ function ReceiveContent() {
                 onClick={handleShareToTwitter}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={showContent ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: 2.2, duration: 0.5 }}
+                transition={{ delay: 2.3, duration: 0.5 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="w-full py-4 bg-gradient-to-r from-slate-700 to-black text-white rounded-xl font-semibold text-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3"
