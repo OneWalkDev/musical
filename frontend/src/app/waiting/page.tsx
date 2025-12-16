@@ -22,7 +22,7 @@ export default function WaitingPage() {
 
     // 初回チェック
     checkReceivedPost()
-  }, [isAuthenticated, router])
+  }, [isAuthenticated])
 
   const checkReceivedPost = async () => {
     setIsChecking(true)

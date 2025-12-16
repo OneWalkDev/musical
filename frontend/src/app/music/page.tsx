@@ -395,9 +395,14 @@ export default function Music() {
 
       if (response.ok) {
         const data = await response.json()
-        // アニメーション完了を待ってから受信画面にリダイレクト（1.5秒）
+        // アニメーション完了を待ってからリダイレクト（1.5秒）
         setTimeout(() => {
-          router.push(`/waiting`)
+          // マッチングした場合は受信画面へ、マッチングしなかった場合は待機画面へ
+          if (data.matched && data.received_post_id) {
+            router.push(`/receive?postId=${data.received_post_id}`)
+          } else {
+            router.push(`/waiting`)
+          }
         }, 1500)
       } else {
         const data = await response.json()

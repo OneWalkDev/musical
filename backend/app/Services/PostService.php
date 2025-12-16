@@ -81,6 +81,14 @@ class PostService
                     'received_post_id' => $availablePoolEntry->post_id,
                     'exchange_date' => $today,
                 ]);
+
+                // マッチングした場合、受け取った曲の情報も返す
+                return [
+                    'message' => 'Post created and matched successfully',
+                    'post_id' => $post->id,
+                    'matched' => true,
+                    'received_post_id' => $availablePoolEntry->post_id,
+                ];
             } else {
                 $this->exchangeRepository->create([
                     'requester_user_id' => $user->id,
@@ -88,12 +96,13 @@ class PostService
                     'received_post_id' => null,
                     'exchange_date' => $today,
                 ]);
-            }
 
-            return [
-                'message' => 'Post created successfully',
-                'post_id' => $post->id,
-            ];
+                return [
+                    'message' => 'Post created, waiting for match',
+                    'post_id' => $post->id,
+                    'matched' => false,
+                ];
+            }
         });
     }
 
@@ -307,6 +316,7 @@ class PostService
             $availablePoolEntry = $this->poolEntryRepository->findAvailableEntry($user, $receivedTrackIds);
 
             if ($availablePoolEntry) {
+                // 見つかった場合、プールエントリを消費してExchangeを更新
                 $this->poolEntryRepository->markAsConsumed($availablePoolEntry);
                 $this->exchangeRepository->update($waitingExchange, [
                     'received_post_id' => $availablePoolEntry->post_id,
