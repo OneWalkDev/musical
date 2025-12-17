@@ -35,7 +35,7 @@ interface Post {
 }
 
 function ReceiveContent() {
-  const { isAuthenticated, user } = useAuth()
+  const { isAuthenticated, user, isLoading: authLoading } = useAuth()
   const router = useRouter()
   const searchParams = useSearchParams()
   const postId = searchParams.get('postId')
@@ -68,6 +68,10 @@ function ReceiveContent() {
   }
 
   useEffect(() => {
+    if (authLoading) {
+      return
+    }
+
     if (!isAuthenticated) {
       router.push("/login")
       return
@@ -107,7 +111,7 @@ function ReceiveContent() {
     }
 
     fetchPost()
-  }, [isAuthenticated, postId, router])
+  }, [authLoading, isAuthenticated, postId, router])
 
   const handlePlayMusic = () => {
     if (post?.track.url) {
@@ -132,7 +136,7 @@ function ReceiveContent() {
     window.open(shareUrl, '_blank')
   }
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <>
         <AppHeader />
