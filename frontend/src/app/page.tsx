@@ -251,7 +251,7 @@ export default function Home() {
             >
               <p className="text-sm font-semibold text-pink-600 tracking-[0.2em]">HOW TO PLAY</p>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-900">
-                3ステップで新たな出会いを
+                4ステップで新たな出会いを
               </h2>
               <p className="text-base sm:text-lg text-slate-700">
                 難しいことは抜き。いつもの再生リストから1曲選ぶだけで、知らない誰かの日常に飛んでいく。
