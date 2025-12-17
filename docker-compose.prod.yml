@@ -10,6 +10,7 @@ services:
       TZ: "Asia/Tokyo"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./dump:/dump
     networks:
       - musical_network
 
