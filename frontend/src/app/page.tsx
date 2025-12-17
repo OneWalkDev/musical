@@ -9,6 +9,9 @@ import Link from 'next/link'
 import { apiRequest } from '@/utils/api'
 import { useEffect, useState } from 'react'
 import { AppFooter } from '@/components/layout/AppFooter'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
+import { getTodayReceivedPostId } from '@/utils/exchange'
 
 interface Stats {
   today_exchange: {
@@ -25,6 +28,8 @@ interface Stats {
 }
 
 export default function Home() {
+  const { isAuthenticated } = useAuth()
+  const router = useRouter()
   const [stats, setStats] = useState<Stats | null>(null)
 
   useEffect(() => {
@@ -81,6 +86,34 @@ export default function Home() {
     }
   }
 
+  const routeToExchangeOrMusic = async () => {
+    const postId = await getTodayReceivedPostId()
+    if (postId) {
+      router.push(`/receive?postId=${postId}`)
+      return
+    }
+
+    router.push('/music')
+  }
+
+  const handleStartClick = async () => {
+    if (!isAuthenticated) {
+      router.push('/music')
+      return
+    }
+
+    await routeToExchangeOrMusic()
+  }
+
+  const handleFreeStartClick = async () => {
+    if (!isAuthenticated) {
+      router.push('/signup')
+      return
+    }
+
+    await routeToExchangeOrMusic()
+  }
+
   return (
     <>
       <AppHeader />
@@ -127,16 +160,16 @@ export default function Home() {
                 transition={{ delay: 0.35, duration: 0.6 }}
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4"
               >
-                <Link href="/music" className="w-full sm:w-auto">
-                  <motion.button
-                    whileHover={{ scale: 1.03, boxShadow: '0 14px 36px rgba(234,88,12,0.2)' }}
-                    whileTap={{ scale: 0.97 }}
-                    className="w-full px-7 sm:px-9 py-3.5 sm:py-4 bg-gradient-to-r from-amber-400 via-pink-500 to-sky-500 text-white rounded-full font-semibold text-base sm:text-lg shadow-lg transition-all duration-300 hover:shadow-xl"
-                    aria-label="音楽交換を今すぐ始める"
-                  >
-                    今すぐ始める
-                  </motion.button>
-                </Link>
+                <motion.button
+                  type="button"
+                  onClick={handleStartClick}
+                  whileHover={{ scale: 1.03, boxShadow: '0 14px 36px rgba(234,88,12,0.2)' }}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full sm:w-auto px-7 sm:px-9 py-3.5 sm:py-4 bg-gradient-to-r from-amber-400 via-pink-500 to-sky-500 text-white rounded-full font-semibold text-base sm:text-lg shadow-lg transition-all duration-300 hover:shadow-xl"
+                  aria-label="音楽交換を今すぐ始める"
+                >
+                  今すぐ始める
+                </motion.button>
                 <Link href="/signup" className="w-full sm:w-auto">
                   <motion.button
                     whileHover={{ scale: 1.03 }}
@@ -293,16 +326,16 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto lg:flex-col">
-                  <Link href="/signup" className="w-full sm:w-auto">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="w-full px-7 sm:px-9 py-3.5 bg-white text-pink-600 rounded-full font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transition-shadow"
-                      aria-label="無料でアカウントを作成"
-                    >
-                      無料で始める
-                    </motion.button>
-                  </Link>
+                  <motion.button
+                    type="button"
+                    onClick={handleFreeStartClick}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="w-full sm:w-auto px-7 sm:px-9 py-3.5 bg-white text-pink-600 rounded-full font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transition-shadow"
+                    aria-label="無料でアカウントを作成"
+                  >
+                    無料で始める
+                  </motion.button>
                 </div>
               </div>
             </div>
