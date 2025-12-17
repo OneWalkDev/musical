@@ -1,13 +1,70 @@
 import type { Metadata } from 'next'
-import { Inter, Noto_Sans_JP } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import { AuthProvider } from '@/contexts/AuthContext'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = localFont({
+  src: [
+    {
+      path: '../../public/fonts/inter-latin-400-normal.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/inter-latin-500-normal.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/inter-latin-600-normal.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/inter-latin-700-normal.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/inter-latin-800-normal.woff2',
+      weight: '800',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
-const notoSansJP = Noto_Sans_JP({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+const notoSansJP = localFont({
+  src: [
+    {
+      path: '../../public/fonts/noto-sans-jp-japanese-400-normal.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/noto-sans-jp-japanese-500-normal.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/noto-sans-jp-japanese-600-normal.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/noto-sans-jp-japanese-700-normal.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/noto-sans-jp-japanese-800-normal.woff2',
+      weight: '800',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-noto-sans-jp',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {

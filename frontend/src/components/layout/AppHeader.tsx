@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { useAuth } from "@/contexts/AuthContext"
@@ -22,7 +23,14 @@ export function AppHeader() {
                             transition={{ duration: 0.6 }}
                             className="text-3xl md:text-4xl"
                         >
-                            <img src="/header-prod.png" className="h-16 md:h-20 w-auto drop-shadow-md" alt="Musical" />
+                            <Image
+                                src="/header-prod.png"
+                                alt="Musical"
+                                width={200}
+                                height={80}
+                                className="h-16 md:h-20 w-auto drop-shadow-md"
+                                priority
+                            />
                         </motion.div>
                     </Link>
 
