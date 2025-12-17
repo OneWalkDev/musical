@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\YouTubeUrl;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePostRequest extends FormRequest
@@ -16,7 +17,7 @@ class CreatePostRequest extends FormRequest
         return [
             'title' => 'required|string|max:200',
             'artist' => 'required|string|max:200',
-            'url' => 'required|url',
+            'url' => ['required', 'url', new YouTubeUrl()],
             'musicbrainz_id' => 'nullable|string|max:100',
             'cover_art_url' => 'nullable|url|max:500',
             'primary_genre_id' => 'required|exists:genres,id',

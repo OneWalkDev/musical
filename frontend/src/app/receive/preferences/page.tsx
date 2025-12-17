@@ -9,11 +9,19 @@ import { IoMusicalNotes } from 'react-icons/io5'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { apiRequest } from '@/utils/api'
 import { AppFooter } from '@/components/layout/AppFooter'
+import { Modal, ModalType } from '@/components/ui/Modal'
 
 interface Genre {
   id: number
   name: string
   slug: string
+}
+
+interface ModalState {
+  isOpen: boolean
+  type: ModalType
+  title: string
+  message: string
 }
 
 const MIN_GENRE_SELECTION = 1
@@ -27,6 +35,12 @@ export default function ReceivePreferencesPage() {
   const [genreSearch, setGenreSearch] = useState('')
   const [isLoadingGenres, setIsLoadingGenres] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [modal, setModal] = useState<ModalState>({
+    isOpen: false,
+    type: 'success',
+    title: '',
+    message: '',
+  })
 
   const filteredGenres = genres.filter(genre =>
     genre.name.toLowerCase().includes(genreSearch.toLowerCase())
@@ -73,10 +87,27 @@ export default function ReceivePreferencesPage() {
     })
   }
 
+  const showModal = (type: ModalType, title: string, message: string) => {
+    setModal({
+      isOpen: true,
+      type,
+      title,
+      message,
+    })
+  }
+
+  const closeModal = () => {
+    setModal(prev => ({ ...prev, isOpen: false }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (selectedGenres.length < MIN_GENRE_SELECTION) {
-      alert(`少なくとも${MIN_GENRE_SELECTION}つのジャンルを選択してください`)
+      showModal(
+        'error',
+        '選択不足',
+        `少なくとも${MIN_GENRE_SELECTION}つのジャンルを選択してください`
+      )
       return
     }
 
@@ -91,13 +122,25 @@ export default function ReceivePreferencesPage() {
       })
 
       if (response.ok) {
-        alert('受け取りジャンルを更新しました')
+        showModal(
+          'success',
+          '更新完了',
+          '受け取りジャンルを更新しました'
+        )
       } else {
-        alert('更新に失敗しました')
+        showModal(
+          'error',
+          '更新失敗',
+          '更新に失敗しました。もう一度お試しください。'
+        )
       }
     } catch (error) {
       console.error('ジャンル更新エラー:', error)
-      alert('更新に失敗しました')
+      showModal(
+        'error',
+        'エラー',
+        '更新に失敗しました。もう一度お試しください。'
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -106,6 +149,13 @@ export default function ReceivePreferencesPage() {
   return (
     <>
       <AppHeader />
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={closeModal}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+      />
       <main className="relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden bg-gradient-to-br from-[#fff1d7] via-[#ffe7f7] to-[#dff6ff] text-slate-900">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div className="absolute -left-16 -top-10 w-64 h-64 bg-gradient-to-br from-amber-200/70 to-pink-200/60 rounded-full blur-3xl" />

@@ -11,11 +11,19 @@ import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { apiRequest } from '@/utils/api'
 import { AppFooter } from '@/components/layout/AppFooter'
 import Image from 'next/image'
+import { Modal, ModalType } from '@/components/ui/Modal'
 
 interface Genre {
   id: number
   name: string
   slug: string
+}
+
+interface ModalState {
+  isOpen: boolean
+  type: ModalType
+  title: string
+  message: string
 }
 
 interface MBArtist {
@@ -76,6 +84,14 @@ export default function Music() {
   const [canPostToday, setCanPostToday] = useState(true)
   const [postLimitMessage, setPostLimitMessage] = useState('')
 
+  // モーダル用state
+  const [modal, setModal] = useState<ModalState>({
+    isOpen: false,
+    type: 'success',
+    title: '',
+    message: '',
+  })
+
   const router = useRouter();
 
   // 検索でフィルタリングされたジャンル
@@ -87,7 +103,7 @@ export default function Music() {
   function normalizeYoutubeUrl(input: string): string {
     try {
       const u = new URL(input);
-      const host = u.hostname.replace(/^www\./, "");
+      const host = u.hostname.replace(/^www\./, "").toLowerCase();
 
       // youtu.be/<id>?xxx  → ?以降削除
       if (host === "youtu.be") {
@@ -108,6 +124,16 @@ export default function Music() {
     } catch {
       // URLとして解釈できない文字列はそのまま
       return input;
+    }
+  }
+
+  function isValidYoutubeUrl(input: string): boolean {
+    try {
+      const parsed = new URL(input);
+      const host = parsed.hostname.replace(/^www\./, "").toLowerCase();
+      return host === "youtube.com" || host === "youtu.be";
+    } catch {
+      return false;
     }
   }
 
@@ -345,6 +371,19 @@ export default function Music() {
     setManualTitleEntry(false) // 手動入力フラグもリセット
   }
 
+  const showModal = (type: ModalType, title: string, message: string) => {
+    setModal({
+      isOpen: true,
+      type,
+      title,
+      message,
+    })
+  }
+
+  const closeModal = () => {
+    setModal(prev => ({ ...prev, isOpen: false }))
+  }
+
   // ジャンル選択のトグル（最大3つまで）
   const toggleGenre = (genreId: number) => {
     setSelectedGenres(prev => {
@@ -364,9 +403,40 @@ export default function Music() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    const trimmedUrl = url.trim()
+
+    if (!trimmedUrl) {
+      showModal(
+        'error',
+        'URL未入力',
+        'YouTubeのURLを入力してください。'
+      )
+      return
+    }
+
+    const normalizedUrl = normalizeYoutubeUrl(trimmedUrl)
+    const finalUrl = normalizedUrl
+
+    if (normalizedUrl !== url) {
+      setUrl(normalizedUrl)
+    }
+
+    if (!isValidYoutubeUrl(normalizedUrl)) {
+      showModal(
+        'error',
+        'URLが無効です',
+        'YouTubeのURLのみ送信できます（youtube.com または youtu.be）。'
+      )
+      return
+    }
+
     // ジャンルが選択されているかチェック
     if (selectedGenres.length === 0) {
-      alert('ジャンルを少なくとも1つ選択してください')
+      showModal(
+        'error',
+        'ジャンル未選択',
+        'ジャンルを少なくとも1つ選択してください'
+      )
       return
     }
 
@@ -379,7 +449,7 @@ export default function Music() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          url,
+          url: finalUrl,
           title,
           artist,
           impression: impression || null,
@@ -402,14 +472,21 @@ export default function Music() {
           }
         }, 1500)
       } else {
-        const data = await response.json()
-        console.error('送信エラー:', data)
-        alert(data.error || '曲の送信に失敗しました')
+        console.error('送信エラー')
+        showModal(
+          'error',
+          '送信失敗',
+          '曲の送信に失敗しました。もう一度お試しください。'
+        )
         setIsSubmitting(false)
       }
     } catch (error) {
       console.error('送信エラー:', error)
-      alert('曲の送信に失敗しました')
+      showModal(
+        'error',
+        'エラー',
+        '曲の送信に失敗しました。もう一度お試しください。'
+      )
       setIsSubmitting(false)
     }
   }
@@ -417,6 +494,13 @@ export default function Music() {
   return (
     <>
       <AppHeader />
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={closeModal}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+      />
       <main className="relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden bg-gradient-to-br from-[#fff1d7] via-[#ffe7f7] to-[#dff6ff] text-slate-900">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div className="absolute -left-16 -top-10 w-64 h-64 bg-gradient-to-br from-amber-200/70 to-pink-200/60 rounded-full blur-3xl" />
