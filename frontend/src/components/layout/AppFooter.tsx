@@ -51,6 +51,18 @@ export function AppFooter() {
                             >
                                 ログイン
                             </Link>
+                            <Link
+                                href="/privacy"
+                                className="text-sm text-slate-600 hover:text-amber-600 transition-colors duration-200"
+                            >
+                                プライバシーポリシー
+                            </Link>
+                            <Link
+                                href="/terms"
+                                className="text-sm text-slate-600 hover:text-amber-600 transition-colors duration-200"
+                            >
+                                利用規約
+                            </Link>
                         </nav>
                     </div>
 
