@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { IoMusicalNotes } from 'react-icons/io5'
-import { LuLink } from 'react-icons/lu'
 import { FaMusic, FaUser } from 'react-icons/fa'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { apiRequest } from '@/utils/api'
@@ -83,11 +82,10 @@ export default function Music() {
     genre.name.toLowerCase().includes(genreSearch.toLowerCase())
   )
 
-
+  // YouTube URL正規化関数
   function normalizeYoutubeUrl(input: string): string {
     try {
       const u = new URL(input);
-
       const host = u.hostname.replace(/^www\./, "");
 
       // youtu.be/<id>?xxx  → ?以降削除
@@ -104,11 +102,21 @@ export default function Music() {
         return `${u.protocol}//${u.host}/watch?v=${v}`;
       }
 
-      // それ以外は一旦そのまま返す（必要ならルール追加）
+      // それ以外は一旦そのまま返す
       return input;
     } catch {
       // URLとして解釈できない文字列はそのまま
       return input;
+    }
+  }
+
+  // URL入力欄からフォーカスが外れた時の処理
+  const handleUrlBlur = () => {
+    if (!url) return;
+
+    const normalized = normalizeYoutubeUrl(url);
+    if (normalized !== url) {
+      setUrl(normalized);
     }
   }
 
@@ -352,18 +360,6 @@ export default function Music() {
     })
   }
 
-  const handleUrlBlur = () => {
-    const normalizeUrl = normalizeYoutubeUrl(url);
-    const regex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]{11}$/;
-    const isYoutubeUrl = regex.test(normalizeUrl);
-
-    if (isYoutubeUrl) {
-      setUrl(normalizeUrl)
-    }
-
-    console.log(isYoutubeUrl);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -496,26 +492,23 @@ export default function Music() {
             className="bg-white/85 backdrop-blur-xl rounded-3xl p-8 border border-white/60 shadow-2xl"
           >
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="url" className="block text-slate-800 font-semibold mb-2">
-                  YoutubeのURL
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                    <LuLink />
+              {/* カバーアート表示 */}
+              {coverArtUrl && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex justify-center"
+                >
+                  <div className="relative">
+                    <img
+                      src={coverArtUrl}
+                      alt="Album Cover"
+                      className="w-48 h-48 rounded-lg shadow-2xl border-2 border-white/20"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
                   </div>
-                  <input
-                    type="text"
-                    id="url"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    onBlur={handleUrlBlur}
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-amber-100 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all duration-200 shadow-sm"
-                    placeholder="YoutubeのURLを入力"
-                    required
-                  />
-                </div>
-              </div>
+                </motion.div>
+              )}
 
               <div>
                 <label htmlFor="artist" className="block text-slate-800 font-semibold mb-2">
@@ -781,23 +774,49 @@ export default function Music() {
                 )}
               </div>
 
-              {/* カバーアート表示 */}
-              {coverArtUrl && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex justify-center"
-                >
-                  <div className="relative">
-                    <img
-                      src={coverArtUrl}
-                      alt="Album Cover"
-                      className="w-48 h-48 rounded-lg shadow-2xl border-2 border-white/20"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
-                  </div>
-                </motion.div>
+              {/* YouTubeで検索ボタン */}
+              {artist && title && (
+                <div>
+                  <motion.button
+                    type="button"
+                    onClick={() => {
+                      const searchQuery = `${artist} ${title}`
+                      const youtubeSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`
+                      window.open(youtubeSearchUrl, '_blank')
+                    }}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    YouTubeで検索
+                  </motion.button>
+                  <p className='mt-3'>Youtubeから最適な動画を探して、「共有」からリンクを取得してください</p>
+                </div>
               )}
+
+              {/* YouTubeのURL入力 */}
+              <div>
+                <label htmlFor="url" className="block text-slate-800 font-semibold mb-2">
+                  YouTubeのURL
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="url"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    onBlur={handleUrlBlur}
+                    className="w-full px-4 py-3 bg-white border border-amber-100 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-transparent transition-all duration-200 shadow-sm"
+                    placeholder="YouTubeのURLを入力"
+                    required
+                  />
+                </div>
+              </div>
 
               {/* 手動入力についての説明 */}
               {(manualArtistEntry || manualTitleEntry) && (
