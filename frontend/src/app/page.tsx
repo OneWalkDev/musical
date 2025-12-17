@@ -148,35 +148,6 @@ export default function Home() {
                   </motion.button>
                 </Link>
               </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.55, duration: 0.6 }}
-                className="flex flex-col sm:flex-row items-center gap-4 bg-white/80 border border-amber-100 shadow-sm rounded-2xl p-4 backdrop-blur"
-                role="status"
-                aria-live="polite"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 via-pink-400 to-sky-400 flex items-center justify-center text-white text-xl shadow-inner" aria-hidden="true">
-                    <IoMusicalNotes />
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.22em] text-amber-600 font-semibold">now swapping</p>
-                    <p className="text-base font-semibold text-slate-900">
-                      {stats?.popular_track ?
-                        `${stats.popular_track.title} · ${stats.popular_track.genre}` :
-                        'Sunrise Chill · City Pop'
-                      }
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 text-sm font-semibold text-amber-700">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-                  {stats?.active_users || 0}人交換完了！
-                </div>
-              </motion.div>
-
             </div>
 
             <motion.div
@@ -203,9 +174,6 @@ export default function Home() {
                       }
                     </p>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-gradient-to-r from-amber-100 to-pink-100 text-amber-700 text-xs font-semibold shadow-sm">
-                    交換済
-                  </span>
                 </div>
 
                 <div className="relative p-6 space-y-6">
@@ -223,7 +191,12 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
+                  <div className="flex items-center justify-center gap-3 text-sm font-semibold text-amber-700">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+                    本日{stats?.active_users || 0}人利用
+                  </div>
                 </div>
+
               </div>
 
               <div className="pointer-events-none absolute -left-10 -top-10 text-amber-200/70 text-6xl animate-float" aria-hidden="true">
@@ -258,13 +231,13 @@ export default function Home() {
               </p>
             </motion.div>
 
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 mt-10 sm:mt-12"
-              >
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid md:grid-cols-2 gap-6 sm:gap-8 md:gap-10 mt-10 sm:mt-12"
+            >
               {[
                 { step: '1', title: '登録してログイン', desc: '必要なのはニックネームとパスワードだけ。すぐに始められる' },
                 { step: '2', title: 'ジャンル・気分をセット', desc: '好きなジャンルやシーンで「今日の1曲」を決める。' },
@@ -274,7 +247,7 @@ export default function Home() {
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className={`relative overflow-hidden rounded-3xl bg-white/85 border border-white/60 shadow-xl p-6 sm:p-7 group ${['-rotate-2','rotate-2','-rotate-1','rotate-1'][index]} hover:rotate-0 hover:shadow-2xl transition-all duration-300`}
+                  className={`relative overflow-hidden rounded-3xl bg-white/85 border border-white/60 shadow-xl p-6 sm:p-7 group ${['-rotate-2', 'rotate-2', '-rotate-1', 'rotate-1'][index]} hover:rotate-0 hover:shadow-2xl transition-all duration-300`}
                   whileHover={{ scale: 1.02 }}
                 >
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_36%)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true" />
@@ -336,7 +309,7 @@ export default function Home() {
           </motion.div>
         </section>
       </main>
-      <AppFooter/>
+      <AppFooter />
     </>
   )
 }
