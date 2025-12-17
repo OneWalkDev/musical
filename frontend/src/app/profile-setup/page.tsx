@@ -9,11 +9,19 @@ import { IoMusicalNotes } from 'react-icons/io5'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { apiRequest } from '@/utils/api'
 import { AppFooter } from '@/components/layout/AppFooter'
+import { Modal, ModalType } from '@/components/ui/Modal'
 
 interface Genre {
   id: number
   name: string
   slug: string
+}
+
+interface ModalState {
+  isOpen: boolean
+  type: ModalType
+  title: string
+  message: string
 }
 
 export default function ProfileSetup() {
@@ -25,6 +33,12 @@ export default function ProfileSetup() {
   const [genreSearch, setGenreSearch] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingGenres, setIsLoadingGenres] = useState(true)
+  const [modal, setModal] = useState<ModalState>({
+    isOpen: false,
+    type: 'success',
+    title: '',
+    message: '',
+  })
   const MIN_GENRE_SELECTION = 1
 
   const filteredGenres = genres.filter(genre =>
@@ -54,6 +68,19 @@ export default function ProfileSetup() {
     fetchGenres()
   }, [isAuthenticated, router])
 
+  const showModal = (type: ModalType, title: string, message: string) => {
+    setModal({
+      isOpen: true,
+      type,
+      title,
+      message,
+    })
+  }
+
+  const closeModal = () => {
+    setModal(prev => ({ ...prev, isOpen: false }))
+  }
+
   const toggleGenre = (genreId: number) => {
     setSelectedGenres(prev => {
       if (prev.includes(genreId)) {
@@ -65,20 +92,15 @@ export default function ProfileSetup() {
     })
   }
 
-  const getCsrfToken = (): string => {
-    const name = 'csrftoken'
-    const cookieValue = document.cookie
-      .split('; ')
-      .find(row => row.startsWith(name + '='))
-      ?.split('=')[1]
-    return cookieValue || ''
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (selectedGenres.length < MIN_GENRE_SELECTION) {
-      alert(`少なくとも${MIN_GENRE_SELECTION}つのジャンルを選択してください`)
+      showModal(
+        'error',
+        '選択不足',
+        `少なくとも${MIN_GENRE_SELECTION}つのジャンルを選択してください`
+      )
       return
     }
 
@@ -99,14 +121,21 @@ export default function ProfileSetup() {
         // プロフィール設定完了 → 音楽投稿画面へ
         router.push('/music')
       } else {
-        const data = await response.json()
-        console.error('ジャンル登録エラー:', data)
-        alert('ジャンルの登録に失敗しました')
+        console.error('ジャンル登録エラー')
+        showModal(
+          'error',
+          '登録失敗',
+          'ジャンルの登録に失敗しました。もう一度お試しください。'
+        )
+        setIsLoading(false)
       }
     } catch (error) {
       console.error('ジャンル登録エラー:', error)
-      alert('ジャンルの登録に失敗しました')
-    } finally {
+      showModal(
+        'error',
+        'エラー',
+        'ジャンルの登録に失敗しました。もう一度お試しください。'
+      )
       setIsLoading(false)
     }
   }
@@ -125,6 +154,13 @@ export default function ProfileSetup() {
   return (
     <>
       <AppHeader />
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={closeModal}
+        type={modal.type}
+        title={modal.title}
+        message={modal.message}
+      />
       <main className="relative flex items-center justify-center min-h-screen px-4 py-12 overflow-hidden bg-gradient-to-br from-[#fff1d7] via-[#ffe7f7] to-[#dff6ff] text-slate-900">
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div className="absolute -left-16 -top-10 w-64 h-64 bg-gradient-to-br from-amber-200/70 to-pink-200/60 rounded-full blur-3xl" />
