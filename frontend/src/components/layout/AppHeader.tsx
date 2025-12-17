@@ -13,9 +13,6 @@ export function AppHeader() {
         {/* warning解消用 */}
         <div></div>
         <motion.header
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
             className="bg-white/80 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 shadow-sm text-slate-900"
         >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

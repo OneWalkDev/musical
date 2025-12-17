@@ -4,10 +4,22 @@ import Link from 'next/link'
 import { motion } from 'motion/react'
 import { AppHeader } from '@/components/layout/AppHeader'
 import { IoMusicalNotes, IoSettingsSharp } from 'react-icons/io5'
-import { FaHistory, FaHeart, FaPaperPlane } from 'react-icons/fa'
+import { FaHistory, FaHeart, FaPaperPlane, FaUser } from 'react-icons/fa'
 import { AppFooter } from '@/components/layout/AppFooter'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function SettingsPage() {
+  const { user, isAuthenticated } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login')
+    }
+  }, [isAuthenticated, router])
+
   const cards = [
     {
       title: '受け取るジャンル',
@@ -54,11 +66,27 @@ export default function SettingsPage() {
               設定
             </div>
             <h1 className="text-3xl sm:text-4xl font-black text-slate-900 mt-4">
-              あなたに届く音をカスタマイズ
+              あなたに届く音楽をカスタマイズ
             </h1>
             <p className="text-slate-600 mt-2">
               受信ジャンルの変更や履歴の確認はこちらから
             </p>
+            {user && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="mt-6 inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-white/90 border border-white/60 shadow-lg"
+              >
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 via-pink-500 to-sky-500 flex items-center justify-center text-white shadow-md">
+                  <FaUser className="text-lg" />
+                </div>
+                <div className="text-left">
+                  <p className="text-xs text-slate-500 font-medium">ユーザー名</p>
+                  <p className="text-lg font-bold text-slate-900">{user.username}</p>
+                </div>
+              </motion.div>
+            )}
           </motion.div>
 
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
