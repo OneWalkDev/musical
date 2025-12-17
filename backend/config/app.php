@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'aliases' => [
+        'pay_jp_secret' => env('PAY_JP_SECRET'),
+        'pay_jp_key' => env('PAY_JP_KEY'),
+    ],
 ];

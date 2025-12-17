@@ -2,13 +2,49 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { useAuth } from "@/contexts/AuthContext"
 
+interface Subscription {
+    id: number
+    subscription_type: {
+        id: number
+        title: string
+        price: number
+    }
+}
+
 export function AppHeader() {
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated, user } = useAuth()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [subscription, setSubscription] = useState<Subscription | null>(null)
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchSubscription()
+        }
+    }, [isAuthenticated])
+
+    const fetchSubscription = async () => {
+        try {
+            const authToken = localStorage.getItem('auth_token')
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user-subscription/`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                },
+            })
+
+            if (response.ok) {
+                const data = await response.json()
+                if (data.has_subscription) {
+                    setSubscription(data.subscription)
+                }
+            }
+        } catch (error) {
+            console.error('Failed to fetch subscription:', error)
+        }
+    }
 
     return (<>
         {/* warning解消用 */}
@@ -39,6 +75,20 @@ export function AppHeader() {
                         {isAuthenticated ? (
 
                             <div className="flex items-center gap-3">
+                                {/* User Info & Subscription */}
+                                <div className="flex flex-col items-end mr-2">
+                                    {user && (
+                                        <span className="text-sm font-medium text-slate-900">
+                                            {user.username}
+                                        </span>
+                                    )}
+                                    {subscription && (
+                                        <span className="text-xs px-2 py-0.5 bg-gradient-to-r from-amber-400 to-pink-500 text-white rounded-full font-semibold">
+                                            {subscription.subscription_type.title}
+                                        </span>
+                                    )}
+                                </div>
+
                                 <motion.div
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}

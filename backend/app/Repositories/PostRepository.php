@@ -4,7 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 class PostRepository
 {
@@ -44,9 +45,9 @@ class PostRepository
     public function getMostPopularTrack(): ?array
     {
         // 最も多く交換されているトラックを取得
-        $trackId = \DB::table('exchanges')
+        $trackId = DB::table('exchanges')
             ->join('posts', 'exchanges.received_post_id', '=', 'posts.id')
-            ->select('posts.track_id', \DB::raw('count(*) as exchange_count'))
+            ->select('posts.track_id', DB::raw('count(*) as exchange_count'))
             ->whereNotNull('exchanges.received_post_id')
             ->groupBy('posts.track_id')
             ->orderBy('exchange_count', 'desc')

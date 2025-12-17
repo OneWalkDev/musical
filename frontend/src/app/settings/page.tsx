@@ -4,21 +4,58 @@ import Link from 'next/link'
 import { motion } from 'motion/react'
 import { AppHeader } from '@/components/layout/AppHeader'
 import { IoMusicalNotes, IoSettingsSharp } from 'react-icons/io5'
-import { FaHistory, FaHeart, FaPaperPlane, FaUser } from 'react-icons/fa'
+import { FaHistory, FaHeart, FaPaperPlane, FaUser, FaSubscript, FaCashRegister } from 'react-icons/fa'
 import { AppFooter } from '@/components/layout/AppFooter'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function SettingsPage() {
   const { user, isAuthenticated } = useAuth()
   const router = useRouter()
+  const [hasSubscription, setHasSubscription] = useState<boolean | null>(null)
 
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/login')
     }
   }, [isAuthenticated, router])
+
+  useEffect(() => {
+    if (!isAuthenticated) return
+
+    const fetchSubscription = async () => {
+      try {
+        const authToken = localStorage.getItem('auth_token')
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user-subscription/`, {
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+          },
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setHasSubscription(!!data.has_subscription)
+          return
+        }
+      } catch (error) {
+        console.error('Failed to fetch subscription:', error)
+      }
+
+      setHasSubscription(false)
+    }
+
+    fetchSubscription()
+  }, [isAuthenticated])
+
+  const subscriptionDesc =
+    hasSubscription === null
+      ? 'サブスクリプションを確認中...'
+      : hasSubscription
+        ? 'プランの詳細と解約はこちら'
+        : 'サブスクリプションを登録します'
+
+  const subscriptionHref = hasSubscription ? '/subscription/manage' : '/subscription'
 
   const cards = [
     {
@@ -41,6 +78,13 @@ export default function SettingsPage() {
       href: '/sent/history',
       icon: <FaPaperPlane />,
       color: 'from-pink-500 via-purple-500 to-indigo-500'
+    },
+    {
+      title: 'サブスクリプション',
+      desc: subscriptionDesc,
+      href: subscriptionHref,
+      icon: <FaCashRegister />,
+      color: 'from-orange-500 via-cyan-500 to-green-500'
     },
   ]
 
