@@ -6,6 +6,7 @@ services:
     container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./dump:/dump
     environment:
       - POSTGRES_DB=musical
       - POSTGRES_USER=postgres
