@@ -269,7 +269,7 @@ export default function TermsOfService() {
                   </p>
                   <p className="text-sm mt-2">
                     GitHub：
-                    <a href="https://github.com/yurisi0212/musical/issues" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-700 underline ml-1">
+                    <a href="https://github.com/OneWalkDev/musical/issues" target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:text-pink-700 underline ml-1">
                       Issues
                     </a>
                   </p>
