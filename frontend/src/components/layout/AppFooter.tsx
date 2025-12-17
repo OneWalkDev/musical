@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { IoMusicalNotes } from 'react-icons/io5'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
 
@@ -13,7 +14,13 @@ export function AppFooter() {
                     {/* Brand Section */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2">
-                            <img src="/header-prod.png" className='h-[70px]'/>
+                            <Image
+                                src="/header-prod.png"
+                                alt="Musical"
+                                width={175}
+                                height={70}
+                                className="h-[70px] w-auto"
+                            />
                         </div>
                         <p className="text-sm text-slate-600 leading-relaxed">
                             1日1曲の交換で、新しい音楽との出会いを。

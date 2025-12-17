@@ -10,6 +10,7 @@ import { FaMusic, FaUser } from 'react-icons/fa'
 import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md'
 import { apiRequest } from '@/utils/api'
 import { AppFooter } from '@/components/layout/AppFooter'
+import Image from 'next/image'
 
 interface Genre {
   id: number
@@ -500,10 +501,13 @@ export default function Music() {
                   className="flex justify-center"
                 >
                   <div className="relative">
-                    <img
+                    <Image
                       src={coverArtUrl}
                       alt="Album Cover"
+                      width={192}
+                      height={192}
                       className="w-48 h-48 rounded-lg shadow-2xl border-2 border-white/20"
+                      unoptimized
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
                   </div>
