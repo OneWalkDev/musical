@@ -5,6 +5,8 @@ import Image from "next/image"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { useAuth } from "@/contexts/AuthContext"
+import { useRouter } from "next/navigation"
+import { getTodayReceivedPostId } from "@/utils/exchange"
 
 interface Subscription {
     id: number
@@ -16,7 +18,8 @@ interface Subscription {
 }
 
 export function AppHeader() {
-    const { isAuthenticated, user } = useAuth()
+    const { isAuthenticated, isLoading: authLoading , user} = useAuth()
+    const router = useRouter()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [subscription, setSubscription] = useState<Subscription | null>(null)
 
@@ -44,6 +47,25 @@ export function AppHeader() {
         } catch (error) {
             console.error('Failed to fetch subscription:', error)
         }
+    }
+
+    const handleSendMusicClick = async () => {
+        if (authLoading) {
+            return
+        }
+
+        if (!isAuthenticated) {
+            router.push("/login")
+            return
+        }
+
+        const postId = await getTodayReceivedPostId()
+        if (postId) {
+            router.push(`/receive?postId=${postId}`)
+            return
+        }
+
+        router.push("/music")
     }
 
     return (<>
@@ -104,12 +126,13 @@ export function AppHeader() {
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                 >
-                                    <Link
-                                        href="/music"
+                                    <button
+                                        type="button"
+                                        onClick={handleSendMusicClick}
                                         className="px-4 lg:px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                                     >
                                         音楽を送る
-                                    </Link>
+                                    </button>
                                 </motion.div>
                             </div>
 
@@ -195,13 +218,16 @@ export function AppHeader() {
                                     >
                                         設定
                                     </Link>
-                                    <Link
-                                        href="/music"
-                                        onClick={() => setMobileMenuOpen(false)}
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setMobileMenuOpen(false)
+                                            handleSendMusicClick()
+                                        }}
                                         className="block px-4 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-semibold text-center shadow-lg hover:shadow-xl transition-all duration-300"
                                     >
                                         音楽を送る
-                                    </Link>
+                                    </button>
                                 </>
                             ) : (
                                 <>

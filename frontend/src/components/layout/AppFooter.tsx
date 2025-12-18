@@ -1,10 +1,32 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { IoMusicalNotes } from 'react-icons/io5'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
+import { getTodayReceivedPostId } from '@/utils/exchange'
 
 export function AppFooter() {
     const currentYear = new Date().getFullYear()
+    const { isAuthenticated } = useAuth()
+    const router = useRouter()
+
+    const handleSendMusicClick = async () => {
+        if (!isAuthenticated) {
+            router.push('/login')
+            return
+        }
+
+        const postId = await getTodayReceivedPostId()
+        if (postId) {
+            router.push(`/receive?postId=${postId}`)
+            return
+        }
+
+        router.push('/music')
+    }
 
     return (
         <footer className="relative bg-gradient-to-br from-slate-50 via-white to-slate-50 border-t border-slate-200/80 text-slate-700">
@@ -40,12 +62,13 @@ export function AppFooter() {
                             >
                                 ホーム
                             </Link>
-                            <Link
-                                href="/music"
-                                className="text-sm text-slate-600 hover:text-amber-600 transition-colors duration-200"
+                            <button
+                                type="button"
+                                onClick={handleSendMusicClick}
+                                className="text-left text-sm text-slate-600 hover:text-amber-600 transition-colors duration-200"
                             >
                                 音楽を送る
-                            </Link>
+                            </button>
                             <Link
                                 href="/signup"
                                 className="text-sm text-slate-600 hover:text-amber-600 transition-colors duration-200"
